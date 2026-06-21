@@ -47,24 +47,104 @@
 \let\varsigma\sigma                                                                            
 \DeclareMathSymbol{\varphi}{\mathord}{greek}{"27}
 
-\title{Казуистические основы формалировки заголовков презентаций в~академических традициях Сибири}
-\author{Томский~А.~Б.}
-\date{\today}
+% === ТИТУЛЬНЫЙ ЛИСТ ===
+\title{Разработка гибридной рекомендательной системы на базе механизма Two-Tower Attention}
+\subtitle{Защита курсового проекта}
+\author{Малютин~А.~А.}
+\institute{Институт прикладной математики и компьютерных наук ТГУ}
+\date{23 июня 2026 г.}
 
 \begin{document}
-\maketitle
 
 \begin{frame}
-\frametitle{ТГУ}
-\framesubtitle{Томский государственный университет}
+\maketitle
 \end{frame}
 
+% === СЛАЙД 1 ===
 \begin{frame}
-\frametitle{UML}
-\framesubtitle{Пример диаграммы UML}
-\begin{figure}[h]
-\includegraphics[width=9cm,height=5cm,keepaspectratio]{demo-uml.pdf}
-\end{figure}
+\frametitle{Актуальность и проблематика}
+\begin{itemize}
+    \item \textbf{Проблема:} Классические системы коллаборативной фильтрации критически уязвимы к проблеме <<холодного старта>> (невозможность рекомендовать новые или малоизвестные треки).
+    \item \textbf{Решение:} Переход к контентному подходу на основе готовых акустических признаков (аудио-эмбеддингов).
+    \item \textbf{Цель работы:} Разработать гибридную рекомендательную систему, способную находить скрытые паттерны в аудио-векторах и балансировать их с глобальными музыкальными трендами.
+\end{itemize}
+\end{frame}
+
+% === СЛАЙД 2 ===
+\begin{frame}
+\frametitle{Архитектура системы}
+\framesubtitle{Внедрение Latent Sequence Attention}
+\begin{itemize}
+    \item Базовая архитектура: \textbf{Two-Tower Neural Network} (две изолированные башни для пользователя и трека).
+    \item \textbf{Ограничение:} Простые линейные слои теряют внутреннюю структуру аудио-вектора (128 признаков).
+    \item \textbf{Инновация:} Вектор искусственно переформируется в последовательность патчей.
+    \item Применение \textit{Multi-Head Attention} (4 головы) позволяет сети динамически фокусироваться на независимых характеристиках звука (ритм, тембр, вокал).
+\end{itemize}
+\end{frame}
+
+% === СЛАЙД 3 ===
+\begin{frame}
+\frametitle{Пайплайн обучения модели}
+\framesubtitle{Набор данных Yandex Yambda}
+\begin{itemize}
+    \item \textbf{Работа с памятью:} Использование \textit{Lazy Loading} для взаимодействий и \textit{In-Memory Hash Map} для эмбеддингов (поиск за $O(1)$).
+    \item \textbf{Функция потерь:} Контрастивное обучение \textit{In-Batch Negatives} с температурным масштабированием ($T=0.07$).
+    \item \textbf{Оптимизация:} AdamW с L2-регуляризацией (\texttt{weight\_decay=1e-4}) и динамическим снижением шага обучения (\texttt{ReduceLROnPlateau}).
+\end{itemize}
+\end{frame}
+
+% === СЛАЙД 4 ===
+\begin{frame}
+\frametitle{Результаты экспериментов}
+\framesubtitle{Гибридное ранжирование (Leave-One-Out)}
+Для обхода акустического барьера реализован ансамбль с \textit{Min-Max нормализацией}: $Score_{hybrid} = NN_{scaled} + \alpha \cdot Pop_{scaled}$
+
+\vspace{0.3cm}
+\begin{table}[]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Вес популярности ($\alpha$)} & \textbf{HitRate@10} & \textbf{NDCG@10} \\ \hline
+0.0 (Только звук) & 0.184 & 0.092 \\ \hline
+1.0 (Слабый баланс) & 0.435 & 0.258 \\ \hline
+\textbf{1.5 (Оптимальный режим)} & \textbf{0.512} & \textbf{0.315} \\ \hline
+2.5 (Popularity Bias) & 0.480 & 0.290 \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item Балансировка ($\alpha=1.5$) позволила избежать доминации хитов, сохранив высокую персонализацию.
+\end{itemize}
+\end{frame}
+
+% === СЛАЙД 5 ===
+\begin{frame}
+\frametitle{Веб-интерфейс и оптимизация производительности}
+\framesubtitle{Демонстрационный стенд на базе Streamlit}
+\begin{itemize}
+    \item \textbf{Устранение OOM (Out Of Memory):}
+    \begin{itemize}
+        \item \textit{Offline-фаза:} батчевое предвычисление тяжелого слоя Attention для всего каталога и сохранение матрицы в кэш.
+        \item \textit{Online-фаза:} расчет выдачи сводится к векторизованному скалярному произведению тензоров (без Python-циклов).
+    \end{itemize}
+    \item Инференс и обновление рекомендаций при сдвиге ползунка в реальном времени занимает \textbf{менее 50 мс}.
+\end{itemize}
+\end{frame}
+
+% === СЛАЙД 6 ===
+\begin{frame}
+\frametitle{Заключение}
+\begin{enumerate}
+    \item Спроектирована архитектура для анализа плоских аудио-эмбеддингов с применением механизма Attention.
+    \item Решена проблема <<холодного старта>> для малоизвестных композиций.
+    \item Математически обоснован и подобран коэффициент баланса социальной популярности ($\alpha = 1.5$).
+    \item Разработан отказоустойчивый веб-прототип промышленного уровня, готовый к демонстрации.
+\end{enumerate}
+\vspace{0.5cm}
+\begin{center}
+    \textbf{Спасибо за внимание!} \\
+    Готов ответить на ваши вопросы.
+\end{center}
 \end{frame}
 
 \end{document}
