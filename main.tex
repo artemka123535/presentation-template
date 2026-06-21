@@ -59,7 +59,7 @@
 \frametitle{Объект исследования: Yandex Yambda Dataset}
 \begin{itemize}
     \item \textbf{Объем данных:} 4.79 млрд взаимодействий (1 млн пользователей и 9.39 млн треков).
-    \item \textbf{Ключевой признак:} Плоские аудио-эмбеддинги (размерность 128). Математически описывают акустику трека.
+    \item \textbf{Ключевой признак:} Аудио-эмбеддинги. Математически описывают акустику трека.
 \end{itemize}
 \end{frame}
 
@@ -84,9 +84,6 @@
     \item \textbf{Инновация:} Вектор переформируется в последовательность токенов.
     \item \textbf{Multi-Head Attention (4 головы):} Позволяет сети фокусироваться на независимых характеристиках звука (ритм, тембр).
 \end{itemize}
-\begin{figure}[h]
-\includegraphics[width=0.6\textwidth]{attention.png}
-\end{figure}
 \end{frame}
 
 % === СЛАЙД 7: Алгоритм гибридного ранжирования ===
@@ -115,7 +112,7 @@ Score_{hybrid} = NN_{scaled} + \alpha \cdot Pop_{scaled}
 0.0 (Только звук) & 0.3913 & 0.2246 \\ \hline
 1.0 (Баланс) & 0.9264 & 0.8663 \\ \hline
 \textbf{1.5 (Оптимальный режим)} & \textbf{0.9734} & \textbf{0.9057} \\ \hline
-3.0 (Популярность важнее звучания) & 0.9448 & 0.8779 \\ \hline
+3.0 (Популярность мешает) & 0.9448 & 0.8779 \\ \hline
 \end{tabular}
 \end{table}
 \begin{itemize}
@@ -145,13 +142,12 @@ Score_{hybrid} = NN_{scaled} + \alpha \cdot Pop_{scaled}
     \item Успешно решена проблема <<холодного старта>> за счет гибридной балансировки.
     \item Разработан отказоустойчивый веб-прототип промышленного уровня.
 \end{itemize}
-\vspace{0.3cm}
-\textbf{Основные источники:}
-\begin{enumerate}
-    \item Covington P. et al. Deep Neural Networks for YouTube Recommendations // RecSys '16.
-    \item Vaswani A. et al. Attention Is All You Need // NIPS '17.
-    \item Yandex Research. Yambda Dataset // GitHub.
-\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+    \item Спасибо за внимание!!!
+\end{itemize}
 \end{frame}
 
 \end{document}
