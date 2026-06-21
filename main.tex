@@ -12,7 +12,7 @@
 \usecolortheme{seahorse}
 
 % === ТИТУЛЬНЫЙ ЛИСТ ===
-\title{Разработка гибридной рекомендательной системы на базе механизма Two-Tower Attention}
+\title{Разработка гибридной музыкальной рекомендательной системы}
 \author{Малютин~А.~А., группа 932302 \\ Руководитель: Пожидаев~М.~С.}
 \institute{НИ ТГУ, Институт прикладной математики и компьютерных наук}
 \date{23 июня 2026 г.}
@@ -88,7 +88,7 @@
 \frametitle{Архитектура модели: Latent Sequence Attention}
 \begin{itemize}
     \item \textbf{Проблема:} Простые линейные слои теряют внутреннюю структуру вектора.
-    \item \textbf{Инновация:} Вектор (128) переформируется в последовательность токенов.
+    \item \textbf{Инновация:} Вектор переформируется в последовательность токенов.
     \item \textbf{Multi-Head Attention (4 головы):} Позволяет сети фокусироваться на независимых характеристиках звука (ритм, тембр).
 \end{itemize}
 \begin{figure}[h]
@@ -119,10 +119,10 @@ Score_{hybrid} = NN_{scaled} + \alpha \cdot Pop_{scaled}
 \begin{tabular}{|c|c|c|}
 \hline
 \textbf{Вес популярности ($\alpha$)} & \textbf{HitRate@10} & \textbf{NDCG@10} \\ \hline
-0.0 (Только звук) & 0.184 & 0.092 \\ \hline
-1.0 (Слабый баланс) & 0.435 & 0.258 \\ \hline
-\textbf{1.5 (Оптимальный режим)} & \textbf{0.512} & \textbf{0.315} \\ \hline
-2.5 (Popularity Bias) & 0.480 & 0.290 \\ \hline
+0.0 (Только звук) & 0.3913 & 0.2246 \\ \hline
+1.0 (Баланс) & 0.9264 & 0.8663 \\ \hline
+\textbf{1.5 (Оптимальный режим)} & \textbf{0.9734} & \textbf{0.9057} \\ \hline
+3.0 (Популярность важнее звучания) & 0.9448 & 0.8779 \\ \hline
 \end{tabular}
 \end{table}
 \begin{itemize}
@@ -135,7 +135,7 @@ Score_{hybrid} = NN_{scaled} + \alpha \cdot Pop_{scaled}
 \frametitle{Пользовательский веб-интерфейс}
 \begin{itemize}
     \item Интерактивный стенд на базе Streamlit.
-    \item \textbf{Offline-фаза:} предвычисление матриц треков.
+    \item \textbf{Offline-фаза:} предвычисление векторов треков.
     \item \textbf{Online-фаза:} тензорное умножение на лету.
     \item Изменение веса популярности ползунком мгновенно перестраивает Топ-10.
 \end{itemize}
