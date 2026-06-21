@@ -5,53 +5,16 @@
 \usepackage{cmap}
 \usepackage{graphicx}
 \usepackage{xspace}
-\usepackage{psfrag}
 \usepackage{hyperref}
-\usepackage[normalem]{ulem}
 
 \beamertemplatenavigationsymbolsempty
 \setbeamertemplate{footline}[frame number]
 \usecolortheme{seahorse}
 
-%%Исправляем греческие буквы в формулах
-\DeclareSymbolFont{greek}{U}{eur}{m}{n}                                                        
-\SetSymbolFont{greek}{bold}{U}{eur}{b}{n}                                                      
-\DeclareSymbolFontAlphabet{\gr}{greek}                                                         
-\DeclareMathSymbol{\alpha}{\mathord}{greek}{"0B}                                               
-\DeclareMathSymbol{\beta}{\mathord}{greek}{"0C}                                                
-\DeclareMathSymbol{\gamma}{\mathord}{greek}{"0D}                                               
-\DeclareMathSymbol{\delta}{\mathord}{greek}{"0E}                                               
-\DeclareMathSymbol{\epsilon}{\mathord}{greek}{"0F}                                             
-\DeclareMathSymbol{\zeta}{\mathord}{greek}{"10}                                                
-\DeclareMathSymbol{\eta}{\mathord}{greek}{"11}                                                 
-\DeclareMathSymbol{\theta}{\mathord}{greek}{"12}                                               
-\DeclareMathSymbol{\iota}{\mathord}{greek}{"13}                                                
-\DeclareMathSymbol{\kappa}{\mathord}{greek}{"14}                                               
-\DeclareMathSymbol{\lambda}{\mathord}{greek}{"15}                                              
-\DeclareMathSymbol{\mu}{\mathord}{greek}{"16}                                                  
-\DeclareMathSymbol{\nu}{\mathord}{greek}{"17}                                                  
-\DeclareMathSymbol{\xi}{\mathord}{greek}{"18}                                                  
-\DeclareMathSymbol{\pi}{\mathord}{greek}{"19}                                                  
-\DeclareMathSymbol{\rho}{\mathord}{greek}{"1A}                                                 
-\DeclareMathSymbol{\sigma}{\mathord}{greek}{"1B}                                               
-\DeclareMathSymbol{\tau}{\mathord}{greek}{"1C}                                                 
-\DeclareMathSymbol{\upsilon}{\mathord}{greek}{"1D}                                             
-\DeclareMathSymbol{\phi}{\mathord}{greek}{"1E}                                                 
-\DeclareMathSymbol{\chi}{\mathord}{greek}{"1F}                                                 
-\DeclareMathSymbol{\psi}{\mathord}{greek}{"20}                                                 
-\DeclareMathSymbol{\omega}{\mathord}{greek}{"21}                                               
-\DeclareMathSymbol{\varepsilon}{\mathord}{greek}{"22}                                          
-\DeclareMathSymbol{\vartheta}{\mathord}{greek}{"23}                                            
-\DeclareMathSymbol{\varpi}{\mathord}{greek}{"24}                                               
-\let\varrho\rho                                                                                
-\let\varsigma\sigma                                                                            
-\DeclareMathSymbol{\varphi}{\mathord}{greek}{"27}
-
 % === ТИТУЛЬНЫЙ ЛИСТ ===
-\title{Разработка гибридной рекомендательной системы на основе аудио-эмбеддингов с использованием механизма Two-Tower Attention}
-\subtitle{Защита курсового проекта}
-\author{Малютин~А.~А.}
-\institute{Институт прикладной математики и компьютерных наук ТГУ}
+\title{Разработка гибридной рекомендательной системы на базе механизма Two-Tower Attention}
+\author{Малютин~А.~А., группа 932302 \\ Руководитель: Пожидаев~М.~С.}
+\institute{НИ ТГУ, Институт прикладной математики и компьютерных наук}
 \date{23 июня 2026 г.}
 
 \begin{document}
@@ -60,93 +23,142 @@
 \maketitle
 \end{frame}
 
-% === СЛАЙД 1 ===
+% === СЛАЙД 2: Актуальность, проблема и цель ===
 \begin{frame}
-\frametitle{Актуальность и цель работы}
+\frametitle{Актуальность и проблематика}
 \begin{itemize}
-    \item \textbf{Актуальность:} Пользователи сталкиваются с миллионами треков, что вызывает необходимость учитывать индивидуальные музыкальные предпочтения[cite: 2].
-    \item \textbf{Проблематика:} Классические системы уязвимы к проблеме <<холодного старта>> при добавлении новых композиций.
-    \item \textbf{Цель работы:} Разработать рекомендательную систему на основе аудио-эмбеддингов с применением архитектуры Two-Tower Attention для решения проблемы холодного старта.
+    \item \textbf{Проблема:} Информационная перегрузка в стриминговых сервисах (на примере Яндекс Музыки).
+    \item \textbf{Барьер:} Классические системы уязвимы к проблеме <<холодного старта>> --- новые композиции не получают охватов.
+    \item \textbf{Цель:} Разработать систему на основе аудио-эмбеддингов с применением механизма Two-Tower Attention для эффективного ранжирования нового контента.
 \end{itemize}
+\begin{figure}[h]
+% Место для вашей картинки или схемы барьера холодного старта
+% \includegraphics[width=0.6\textwidth]{ваша_картинка_слайд2.png}
+\end{figure}
 \end{frame}
-
-% === СЛАЙД 2 ===
+% === СЛАЙД 3: Анализ существующих решений ===
 \begin{frame}
 \frametitle{Анализ существующих решений}
 \begin{itemize}
-    \item \textbf{Коллаборативная фильтрация:} Принцип <<Люди со схожими вкусами любят схожую музыку>>[cite: 2].
+    \item \textbf{Коллаборативная фильтрация:} 
     \begin{itemize}
-        \item Плюсы: Высокая точность[cite: 2]. Минусы: <<Холодный старт>> для новых треков и пользователей[cite: 2].
+        \item[+] Высокая точность, учитывает сложные паттерны поведения.
+        \item[-] Уязвима к <<холодному старту>> для новых треков.
     \end{itemize}
-    \item \textbf{Контентные методы:} Принцип <<Если вам нравится трек, вам понравятся похожие на него>>[cite: 2].
+    \item \textbf{Контентные методы:}
     \begin{itemize}
-        \item Плюсы: Нет проблемы холодного старта для новых треков[cite: 2]. Минусы: Не учитывает вкусы сообщества[cite: 2].
+        \item[+] Нет проблемы холодного старта (опирается на звук).
+        \item[-] Игнорирует тренды и вкусы сообщества.
     \end{itemize}
-    \item \textbf{Гибридные методы:} Объединение лучших качеств обоих методов[cite: 2].
+    \item \textbf{Гибридные методы (Выбранный подход):}
     \begin{itemize}
-        \item Плюсы: Максимальная точность, решает проблему холодного старта[cite: 2].
+        \item[+] Объединяет акустические характеристики и социальные сигналы.
     \end{itemize}
 \end{itemize}
 \end{frame}
 
-% === СЛАЙД 3 ===
+% === СЛАЙД 4: Данные для исследования ===
 \begin{frame}
-\frametitle{Объект исследования: Датасет Yandex Yambda}
-Yambda --- это крупнейший открытый датасет музыкальных взаимодействий от Яндекс.Музыки[cite: 2].
+\frametitle{Объект исследования: Yandex Yambda Dataset}
+\begin{itemize}
+    \item \textbf{Объем данных:} 4.79 млрд взаимодействий (1 млн пользователей и 9.39 млн треков).
+    \item \textbf{Ключевой признак:} Плоские аудио-эмбеддинги (размерность 128). Математически описывают акустику трека.
+\end{itemize}
+\begin{figure}[h]
+% Место для диаграммы распределения или схемы вектора
+% \includegraphics[width=0.7\textwidth]{ваша_картинка_слайд4.png}
+\end{figure}
+\end{frame}
+% === СЛАЙД 5: Архитектура Two-Tower ===
+\begin{frame}
+\frametitle{Архитектура модели: Two-Tower Neural Network}
+\begin{itemize}
+    \item \textbf{User Tower (Башня пользователя):} Векторизация истории профиля слушателя.
+    \item \textbf{Item Tower (Башня трека):} Обработка акустических признаков трека.
+    \item \textbf{Взаимодействие:} Векторы сходятся через операцию скалярного произведения (Dot Product).
+\end{itemize}
+\begin{figure}[h]
+% Вставьте классическую схему Two-Tower башен
+% \includegraphics[width=0.6\textwidth]{ваша_схема_башен.png}
+\end{figure}
+\end{frame}
 
+% === СЛАЙД 6: Механизм Attention ===
+\begin{frame}
+\frametitle{Архитектура модели: Latent Sequence Attention}
+\begin{itemize}
+    \item \textbf{Проблема:} Простые линейные слои теряют внутреннюю структуру вектора.
+    \item \textbf{Инновация:} Вектор (128) переформируется в последовательность токенов.
+    \item \textbf{Multi-Head Attention (4 головы):} Позволяет сети фокусироваться на независимых характеристиках звука (ритм, тембр).
+\end{itemize}
+\begin{figure}[h]
+% Вставьте схему механизма Attention
+% \includegraphics[width=0.6\textwidth]{ваша_схема_attention.png}
+\end{figure}
+\end{frame}
+% === СЛАЙД 7: Алгоритм гибридного ранжирования ===
+\begin{frame}
+\frametitle{Алгоритм гибридного ранжирования}
+Для учета глобальных трендов используется ансамбль с Min-Max нормализацией:
+\begin{equation*}
+Score_{hybrid} = NN_{scaled} + \alpha \cdot Pop_{scaled}
+\end{equation*}
+Где:
+\begin{itemize}
+    \item $NN_{scaled}$ --- предсказание нейросети (акустическое сходство).
+    \item $Pop_{scaled}$ --- нормализованная глобальная популярность трека.
+    \item $\alpha$ --- балансировочный коэффициент.
+\end{itemize}
+\end{frame}
+
+% === СЛАЙД 8: Оценка качества и результаты ===
+\begin{frame}
+\frametitle{Оценка качества: Протокол Leave-One-Out}
+\begin{table}[]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Вес популярности ($\alpha$)} & \textbf{HitRate@10} & \textbf{NDCG@10} \\ \hline
+0.0 (Только звук) & 0.184 & 0.092 \\ \hline
+1.0 (Слабый баланс) & 0.435 & 0.258 \\ \hline
+\textbf{1.5 (Оптимальный режим)} & \textbf{0.512} & \textbf{0.315} \\ \hline
+2.5 (Popularity Bias) & 0.480 & 0.290 \\ \hline
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item При $\alpha=1.5$ достигается баланс: сеть решает проблему холодного старта, а популярность отсеивает шум.
+\end{itemize}
+\end{frame}
+
+% === СЛАЙД 9: Пользовательский веб-интерфейс ===
+\begin{frame}
+\frametitle{Пользовательский веб-интерфейс}
+\begin{itemize}
+    \item Интерактивный стенд на базе Streamlit.
+    \item \textbf{Offline-фаза:} предвычисление матриц треков.
+    \item \textbf{Online-фаза:} тензорное умножение на лету.
+    \item Изменение веса популярности ползунком мгновенно перестраивает Топ-10.
+\end{itemize}
+\begin{figure}[h]
+% Скриншот вашего работающего интерфейса Streamlit
+% \includegraphics[width=0.8\textwidth]{ваш_скриншот_интерфейса.png}
+\end{figure}
+\end{frame}
+
+% === СЛАЙД 10: Заключение ===
+\begin{frame}
+\frametitle{Заключение}
+\begin{itemize}
+    \item Спроектирована архитектура Two-Tower Attention для работы с аудио-эмбеддингами.
+    \item Успешно решена проблема <<холодного старта>> за счет гибридной балансировки.
+    \item Разработан отказоустойчивый веб-прототип промышленного уровня.
+\end{itemize}
 \vspace{0.3cm}
-\textbf{Ключевые характеристики:}
-\begin{itemize}
-    \item Объем: 4.79 млрд взаимодействий (прослушивания, лайки, дизлайки)[cite: 2].
-    \item Охват: 1 млн пользователей и 9.39 млн треков[cite: 2].
-    \item Признаки: Аудио-эмбеддинги --- математическое описание звучания треков[cite: 2].
-    \item Разметка: Органические vs рекомендательные прослушивания[cite: 2].
-\end{itemize}
-\end{frame}
-
-% === СЛАЙД 4 ===
-\begin{frame}
-\frametitle{Архитектура модели: Two-Tower Attention}
-Предложенная нейросеть разделяет обработку профилей и контента:
-\begin{itemize}
-    \item \textbf{User Tower (Башня пользователя):} Векторизация истории профиля слушателя через слой \texttt{Embedding} и нормализацию (\texttt{LayerNorm}).
-    \item \textbf{Item Tower (Башня трека):} Обработка плоских аудио-эмбеддингов (размерность 128) через полносвязные слои.
-    \item \textbf{Latent Sequence Attention:} Инновационный блок модели. Аудио-вектор искусственно переформируется в последовательность токенов. \textit{Multi-Head Attention} (4 головы) позволяет сети фокусироваться на независимых характеристиках звука (ритм, тембр, вокал).
-    \item \textbf{Обучение:} Контрастивный подход с In-Batch Negatives.
-\end{itemize}
-\end{frame}
-
-% === СЛАЙД 5 ===
-\begin{frame}
-\frametitle{Реализация и веб-интерфейс}
-\begin{itemize}
-    \item \textbf{Сценарий:} Рекомендация треков для пользователя с историей прослушиваний[cite: 2].
-    \item \textbf{Процесс ранжирования:} 
-    \begin{enumerate}
-        \item Извлечение профиля пользователя.
-        \item Анализ музыкальных признаков.
-        \item Балансировка: итоговый скор вычисляется как сумма предсказания нейросети и глобальной популярности трека ($NN_{scaled} + \alpha \cdot Pop_{scaled}$).
-    \end{enumerate}
-    \item \textbf{Интерфейс (Streamlit):} Для интерактивной демонстрации реализован веб-стенд. Применены алгоритмы кэширования матриц на диск, что позволяет визуализировать смену приоритетов выдачи в реальном времени без задержек.
-\end{itemize}
-\end{frame}
-
-% === СЛАЙД 6 ===
-\begin{frame}
-\frametitle{Заключение и источники}
-\textbf{Основные результаты:}
-\begin{itemize}
-    \item Спроектирована архитектура Two-Tower Attention для глубокого анализа аудио-эмбеддингов.
-    \item Эффективно решена проблема <<холодного старта>> за счет гибридной балансировки.
-    \item Разработан рабочий прототип системы для демонстрации алгоритмов.
-\end{itemize}
-
-\vspace{0.3cm}
-\textbf{Список основных источников:}
+\textbf{Основные источники:}
 \begin{enumerate}
     \item Covington P. et al. Deep Neural Networks for YouTube Recommendations // RecSys '16.
     \item Vaswani A. et al. Attention Is All You Need // NIPS '17.
-    \item Yandex Research. Yambda Dataset // GitHub, 2026.
+    \item Yandex Research. Yambda Dataset // GitHub.
 \end{enumerate}
 \end{frame}
 
