@@ -31,11 +31,8 @@
     \item \textbf{Барьер:} Классические системы уязвимы к проблеме <<холодного старта>> --- новые композиции не получают охватов.
     \item \textbf{Цель:} Разработать систему на основе аудио-эмбеддингов с применением механизма Two-Tower Attention для эффективного ранжирования нового контента.
 \end{itemize}
-\begin{figure}[h]
-% Место для вашей картинки или схемы барьера холодного старта
-% \includegraphics[width=0.6\textwidth]{ваша_картинка_слайд2.png}
-\end{figure}
 \end{frame}
+
 % === СЛАЙД 3: Анализ существующих решений ===
 \begin{frame}
 \frametitle{Анализ существующих решений}
@@ -64,11 +61,8 @@
     \item \textbf{Объем данных:} 4.79 млрд взаимодействий (1 млн пользователей и 9.39 млн треков).
     \item \textbf{Ключевой признак:} Плоские аудио-эмбеддинги (размерность 128). Математически описывают акустику трека.
 \end{itemize}
-\begin{figure}[h]
-% Место для диаграммы распределения или схемы вектора
-% \includegraphics[width=0.7\textwidth]{ваша_картинка_слайд4.png}
-\end{figure}
 \end{frame}
+
 % === СЛАЙД 5: Архитектура Two-Tower ===
 \begin{frame}
 \frametitle{Архитектура модели: Two-Tower Neural Network}
@@ -78,8 +72,7 @@
     \item \textbf{Взаимодействие:} Векторы сходятся через операцию скалярного произведения (Dot Product).
 \end{itemize}
 \begin{figure}[h]
-% Вставьте классическую схему Two-Tower башен
-% \includegraphics[width=0.6\textwidth]{ваша_схема_башен.png}
+\includegraphics[width=0.6\textwidth]{towers.png}
 \end{figure}
 \end{frame}
 
@@ -92,10 +85,10 @@
     \item \textbf{Multi-Head Attention (4 головы):} Позволяет сети фокусироваться на независимых характеристиках звука (ритм, тембр).
 \end{itemize}
 \begin{figure}[h]
-% Вставьте схему механизма Attention
-% \includegraphics[width=0.6\textwidth]{ваша_схема_attention.png}
+\includegraphics[width=0.6\textwidth]{attention.png}
 \end{figure}
 \end{frame}
+
 % === СЛАЙД 7: Алгоритм гибридного ранжирования ===
 \begin{frame}
 \frametitle{Алгоритм гибридного ранжирования}
@@ -140,8 +133,7 @@ Score_{hybrid} = NN_{scaled} + \alpha \cdot Pop_{scaled}
     \item Изменение веса популярности ползунком мгновенно перестраивает Топ-10.
 \end{itemize}
 \begin{figure}[h]
-% Скриншот вашего работающего интерфейса Streamlit
-% \includegraphics[width=0.8\textwidth]{ваш_скриншот_интерфейса.png}
+\includegraphics[width=0.8\textwidth]{gui.png}
 \end{figure}
 \end{frame}
 
